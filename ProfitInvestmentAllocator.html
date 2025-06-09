@@ -1,0 +1,260 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Profit Investment Allocator</title>
+  <style>
+    :root {
+      --bg-color: #121212;
+      --text-color: #f0f0f0;
+      --accent-color: #1db954;
+      --secondary-color: #2a2a2a;
+    }
+
+    body {
+      background-color: var(--bg-color);
+      color: var(--text-color);
+      font-family: Arial, sans-serif;
+      padding: 20px;
+      max-width: 600px;
+      margin: auto;
+    }
+
+    input[type=number],
+	input[type=range],
+	button {
+	  width: 50%;
+	  padding: 10px;
+	  margin: 10px auto;       /* auto left/right centers it */
+	  border: none;
+	  border-radius: 8px;
+	  background-color: var(--secondary-color);
+	  color: var(--text-color);
+	  text-align: center;
+	  display: block;          /* required to make margin auto work */
+	}
+	
+	label {
+	  font-weight: bold;
+	  display: block;
+	  margin-top: 10px;
+	  text-align: center;
+	}
+
+	r(--text-color);
+		}
+
+    input[type=range] {
+      cursor: pointer;
+    }
+
+    button {
+      background-color: var(--accent-color);
+      font-weight: bold;
+      cursor: pointer;
+    }
+	
+	#reset {
+	  padding: 10px 20px;
+	  background-color: #ff4d4d;      /* bright red */
+	  color: black;
+	  border: none;
+	  border-radius: 6px;
+	  font-size: 16px;
+	  cursor: pointer;
+	  transition: background-color 0.3s ease;
+	}
+	
+	#reset:hover {
+	  background-color: #e04343;      /* darker red on hover */
+	}
+	
+	#results {
+	text-align: center;
+	}
+	
+	table {
+	  margin-left: auto;
+	  margin-right: auto;
+	  width: 300px; 
+	  max-width: 90%;
+	}
+	
+	table td:first-child {
+	  text-align: left;
+	}
+	
+	table, th, td {
+	  border: 1px solid white; /* white border */
+	  border-collapse: collapse;
+	}
+
+
+    label {
+      font-weight: bold;
+      display: block;
+      margin-top: 10px;
+    }
+
+    .output {
+      margin-top: 20px;
+      padding: 10px;
+      background-color: #1e1e1e;
+      border-radius: 8px;
+    }
+
+    h2 {
+      color: var(--accent-color);
+	  text-align: center;
+    }
+
+    span {
+      font-weight: bold;
+    }
+  </style>
+</head>
+<body>
+
+  <h2>💰 Profit Investment Allocator 💰</h2>
+
+ <label for="startBalance">Start Balance ($):</label>
+<input type="number" id="startBalance" placeholder="$" >
+
+<label for="endBalance">End Balance ($):</label>
+<input type="number" id="endBalance" placeholder="$" >
+
+
+  <button onclick="calculateProfit()">Calculate Profit</button>
+<hr>
+  <div id="results" style="display:none;">
+	<table>
+  <tr>
+    <td>Profit:</td>
+    <td><strong>$<span id="profitAmount">0.00</span></strong></td>
+  </tr>
+  <tr>
+    <td>Savings:</td>
+    <td>$<span id="savingsAmt">0.00</span></td>
+  </tr>
+  <tr>
+    <td>Investments:</td>
+    <td>$<span id="investAmt">0.00</span></td>
+  </tr>
+</table>
+
+   <hr>
+   <br>
+	<div id="sliders">
+    <label for="savingsRange">Savings: <span id="savingsVal">80</span>%</label>
+    <input type="range" id="savingsRange" min="0" max="100" step="5" value="80" oninput="syncSliders()">
+
+    <label for="investRange">Investments: <span id="investVal">20</span>%</label>
+    <input type="range" id="investRange" min="0" max="100" step="5" value="20" oninput="syncSliders(true)">
+	</div>
+	<button id = "reset" onclick = "reset()">Reset</button>
+  </div>
+
+  <script>
+    let profit = 0;
+
+    function calculateProfit() 
+	{
+	  const start = parseFloat(document.getElementById('startBalance').value);
+	  const end = parseFloat(document.getElementById('endBalance').value);
+	  const slidersDiv = document.getElementById('sliders');
+	  const resultsDiv = document.getElementById('results');
+
+	  if (isNaN(start) || isNaN(end)) 
+	  {
+		alert("Please enter both balances.");
+		return;
+	  }
+
+	  const numericProfit = end - start;
+	  profit = numericProfit.toFixed(2);
+	  document.getElementById('profitAmount').textContent = profit;
+
+	  if (numericProfit <= 0) 
+		  {
+			slidersDiv.style.display = 'none';
+		  } 
+	  else 
+		  {
+			slidersDiv.style.display = 'block';
+			syncSliders();
+		  }
+
+		resultsDiv.style.display = 'block';
+	}
+
+
+    function syncSliders(fromInvest = false) 
+	{
+      const savingsSlider = document.getElementById('savingsRange');
+      const investSlider = document.getElementById('investRange');
+
+      if (fromInvest) 
+		  {
+			savingsSlider.value = 100 - parseInt(investSlider.value);
+		  } 
+	  else 
+		  {
+			investSlider.value = 100 - parseInt(savingsSlider.value);
+		  }
+
+      const savingsPercent = parseInt(savingsSlider.value);
+      const investPercent = parseInt(investSlider.value);
+
+      document.getElementById('savingsVal').textContent = savingsPercent;
+      document.getElementById('investVal').textContent = investPercent;
+
+      const savingsAmt = (profit * savingsPercent / 100).toFixed(2);
+      const investAmt = (profit * investPercent / 100).toFixed(2);
+
+      document.getElementById('savingsAmt').textContent = savingsAmt;
+      document.getElementById('investAmt').textContent = investAmt;
+    }
+	
+	function reset()
+	{	
+		location.reload();
+	}
+	
+	function limitDigits(event) 
+	{
+	  const input = event.target;
+	  if (input.value.length > 7) 
+	  {
+		input.value = input.value.slice(0, 7);
+	  }
+	}
+	
+	function checkMobile() 
+	{
+	  const width = window.innerWidth;
+	  const height = window.innerHeight;
+	  const isMobile = width <= 768;  // common mobile breakpoint
+	  
+	  if (isMobile) 
+	  {
+		console.log(`Mobile detected. Screen size: ${width}x${height}`);
+	  } 
+	  else 
+	  {
+		console.log(`Not mobile. Screen size: ${width}x${height}`);
+	  }
+	  
+	  return { isMobile, width, height };
+	}
+
+// Run on page load
+const screenInfo = checkMobile();
+
+
+document.getElementById('startBalance').addEventListener('input', limitDigits);
+document.getElementById('endBalance').addEventListener('input', limitDigits);
+
+  </script>
+
+</body>
+</html>
