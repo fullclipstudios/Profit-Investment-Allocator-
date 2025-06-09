@@ -2,148 +2,224 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <title>Profit Investment Allocator</title>
+  <title>Investment Allocator</title>
   <style>
     :root {
-      --bg-color: #121212;
-      --text-color: #f0f0f0;
-      --accent-color: #1db954;
-      --secondary-color: #2a2a2a;
-    }
+  --bg-color: #121212;
+  --text-color: #f0f0f0;
+  --accent-color: #1db954;
+  --secondary-color: #2a2a2a;
+}
 
-    body {
-      background-color: var(--bg-color);
-      color: var(--text-color);
-      font-family: Arial, sans-serif;
-      padding: 20px;
-      max-width: 600px;
-      margin: auto;
-    }
+body {
+  background-color: var(--bg-color);
+  color: var(--text-color);
+  font-family: Arial, sans-serif;
+  padding: 20px;
+  max-width: 600px;
+  margin: auto;
+}
 
-    input[type=number],
-	input[type=range],
-	button {
-	  width: 50%;
-	  padding: 10px;
-	  margin: 10px auto;       /* auto left/right centers it */
-	  border: none;
-	  border-radius: 8px;
-	  background-color: var(--secondary-color);
-	  color: var(--text-color);
-	  text-align: center;
-	  display: block;          /* required to make margin auto work */
-	}
-	
-	label {
-	  font-weight: bold;
-	  display: block;
-	  margin-top: 10px;
-	  text-align: center;
-	}
-
-	r(--text-color);
-		}
-
-    input[type=range] {
-      cursor: pointer;
-    }
-
-    button {
-      background-color: var(--accent-color);
-      font-weight: bold;
-      cursor: pointer;
-    }
-	
-	#reset {
-	  padding: 10px 20px;
-	  background-color: #ff4d4d;      /* bright red */
-	  color: black;
-	  border: none;
-	  border-radius: 6px;
-	  font-size: 16px;
-	  cursor: pointer;
-	  transition: background-color 0.3s ease;
-	}
-	
-	#reset:hover {
-	  background-color: #e04343;      /* darker red on hover */
-	}
-	
-	#results {
-	text-align: center;
-	}
-	
-	table {
-	  margin-left: auto;
-	  margin-right: auto;
-	  width: 300px; 
-	  max-width: 90%;
-	}
-	
-	table td:first-child {
-	  text-align: left;
-	}
-	
-	table, th, td {
-	  border: 1px solid white; /* white border */
-	  border-collapse: collapse;
-	}
+input[type=number],
+input[type=range],
+button {
+  width: 100%;              /* Same width for all */
+  max-width: 100%;
+  box-sizing: border-box;   /* Ensure padding doesn’t break layout */
+  padding: 10px;
+  margin: 10px 0;
+  border: none;
+  border-radius: 8px;
+  background-color: var(--secondary-color);
+  color: var(--text-color);
+  text-align: center;
+  display: block;
+}
 
 
-    label {
-      font-weight: bold;
-      display: block;
-      margin-top: 10px;
-    }
+label {
+  font-weight: bold;
+  display: block;
+  margin-top: 10px;
+  text-align: center;
+}
 
-    .output {
-      margin-top: 20px;
-      padding: 10px;
-      background-color: #1e1e1e;
-      border-radius: 8px;
-    }
+input[type=range] {
+  cursor: pointer;
+}
 
-    h2 {
-      color: var(--accent-color);
-	  text-align: center;
-    }
+button {
+  background-color: var(--accent-color);
+  font-weight: bold;
+  cursor: pointer;
+  width: 100%; 
+  font-size: 16px;
+}
 
-    span {
-      font-weight: bold;
-    }
+#reset {
+  background-color: #ff4d4d;
+  color: black;
+  border-radius: 6px;
+  font-size: 16px;
+  transition: background-color 0.3s ease;
+}
+
+#reset:hover {
+  background-color: #e04343;
+}
+
+#additionalBtn {
+  background-color:#264e6a;
+  color: white;
+  border-radius: 6px;
+  font-size: 16px;
+  transition: background-color 0.3s ease;
+}
+
+#additionalBtn:hover{
+  background-color: #2f5f82;
+  font-size: 16.5px;
+}
+
+#expandable {
+  max-height: 0;
+  overflow: hidden;
+  transition: max-height 0.5s ease-out;
+}
+
+#expandable.expanded {
+  max-height: 500px; /* adjust based on expected content */
+}
+
+
+#results {
+  text-align: center;
+}
+
+select#daysInput {
+  width: 200px;
+  max-width: 100%; /* remove artificial limit */
+  box-sizing: border-box;
+  padding: 5px 10px;
+  border: none;
+  border-radius: 6px;
+  background-color: var(--secondary-color);
+  color: var(--text-color);
+  text-align: left;
+  appearance: none;
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  cursor: pointer;
+  font-size: 1rem;
+  display: inline-block;
+  margin: 0; /* remove auto centering */
+}
+
+
+
+#savedPerWeek {
+  margin: 0;
+  padding: 0;
+  font-size: 1rem;
+  text-align: right;
+  color: var(--text-color);
+  white-space: nowrap; /* prevents wrapping that can create space */
+}
+
+
+
+table {
+  width: 100%;
+  border-collapse: collapse;
+  table-layout: auto;
+  
+}
+
+table td {
+  padding: 8px 12px;
+}
+
+table td:first-child {
+  text-align: left;
+}
+
+
+table td:last-child {
+  text-align: right;
+}
+
+table, td {
+  border: 1px solid white;
+}
+
+.output {
+  margin-top: 20px;
+  padding: 10px;
+  background-color: #1e1e1e;
+  border-radius: 8px;
+}
+
+h2 {
+  color: var(--accent-color);
+  text-align: center;
+}
+
+span {
+  font-weight: bold;
+}
+
   </style>
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
 </head>
 <body>
 
-  <h2>💰 Profit Investment Allocator 💰</h2>
+<h2>💰 Profit Investment Allocator 💰</h2>
 
- <label for="startBalance">Start Balance ($):</label>
+<label for="startBalance">Start Balance ($):</label>
 <input type="number" id="startBalance" placeholder="$" >
 
 <label for="endBalance">End Balance ($):</label>
 <input type="number" id="endBalance" placeholder="$" >
 
 
-  <button onclick="calculateProfit()">Calculate Profit</button>
+  <!-- <button onclick="calculateProfit()">Calculate Profit</button> -->
 <hr>
   <div id="results" style="display:none;">
 	<table>
-  <tr>
+  <tr id="profitRow">
     <td>Profit:</td>
     <td><strong>$<span id="profitAmount">0.00</span></strong></td>
   </tr>
-  <tr>
+  <tr id="savingsRow">
     <td>Savings:</td>
     <td>$<span id="savingsAmt">0.00</span></td>
   </tr>
-  <tr>
+  <tr id="investRow">
     <td>Investments:</td>
     <td>$<span id="investAmt">0.00</span></td>
   </tr>
-</table>
+  <tr id="daysRow">
+    <td>
+	<select id="daysInput" onchange="savedPerWeek()">
+	  <option value="" disabled selected>Days in this month </option>
+	  <option value="28">28 days in this month </option>
+	  <option value="29">29 days in this month </option>
+	  <option value="30">30 days in this month </option>
+	  <option value="31">31 days in this month </option>
+	</select>
+	</td>
+	<td>
+  <span id="savedPerWeek">Saved per week: </span>
+</td>
 
-   <hr>
+  </tr>
+</table>
+<hr>
+   
    <br>
+   
 	<div id="sliders">
     <label for="savingsRange">Savings: <span id="savingsVal">80</span>%</label>
     <input type="range" id="savingsRange" min="0" max="100" step="5" value="80" oninput="syncSliders()">
@@ -152,6 +228,13 @@
     <input type="range" id="investRange" min="0" max="100" step="5" value="20" oninput="syncSliders(true)">
 	</div>
 	<button id = "reset" onclick = "reset()">Reset</button>
+	
+	<!-- <button id= "additionalBtn" onclick="toggleExpand()">Additional Metrics</button>
+
+	<div id="expandable" class="collapsed">
+
+	</div> -->
+
   </div>
 
   <script>
@@ -163,28 +246,62 @@
 	  const end = parseFloat(document.getElementById('endBalance').value);
 	  const slidersDiv = document.getElementById('sliders');
 	  const resultsDiv = document.getElementById('results');
-
-	  if (isNaN(start) || isNaN(end)) 
-	  {
-		alert("Please enter both balances.");
-		return;
-	  }
-
+	  const savingsRow = document.getElementById('savingsRow');
+	  const daysRow = document.getElementById('daysRow');
+	  const investRow = document.getElementById('investRow');
+	  const profitRow = document.getElementById('profitRow');
 	  const numericProfit = end - start;
+	  
+	  
+
+	  <!-- if (isNaN(start) || isNaN(end))  -->
+	  <!-- { -->
+		<!-- alert("Please enter both balances."); -->
+		<!-- return; -->
+	  <!-- } -->
+	  
+	  
 	  profit = numericProfit.toFixed(2);
 	  document.getElementById('profitAmount').textContent = profit;
+	  
+	  
 
-	  if (numericProfit <= 0) 
+	  if (numericProfit < 0) 
 		  {
-			slidersDiv.style.display = 'none';
+			slidersDiv.style.display = 'none';		
+			savingsRow.style.display = 'none';
+			investRow.style.display = 'none';
+			daysRow.style.display = 'none';
 		  } 
 	  else 
 		  {
 			slidersDiv.style.display = 'block';
+			savingsRow.style.display = '';
+			investRow.style.display = '';
+			daysRow.style.display = '';
 			syncSliders();
 		  }
+		  
+		<!-- if (numericProfit == 0)  -->
+		  <!-- { -->
+			<!-- slidersDiv.style.display = 'none';		 -->
+			<!-- savingsRow.style.display = 'none'; -->
+			<!-- investRow.style.display = 'none'; -->
+			<!-- daysRow.style.display = 'none'; -->
+			<!-- profitRow.style.display = 'none'; -->
+		  <!-- }  -->
+	  <!-- else  -->
+		  <!-- { -->
+			<!-- slidersDiv.style.display = 'block'; -->
+			<!-- savingsRow.style.display = ''; -->
+			<!-- investRow.style.display = ''; -->
+			<!-- daysRow.style.display = ''; -->
+			<!-- profitRow.style.display = ''; -->
+			<!-- syncSliders(); -->
+		  <!-- } -->
 
 		resultsDiv.style.display = 'block';
+		savedPerWeek(); 
 	}
 
 
@@ -217,7 +334,16 @@
 	
 	function reset()
 	{	
-		location.reload();
+		<!-- location.reload(); -->
+		document.getElementById('startBalance').value = '';
+		document.getElementById('endBalance').value = '';
+		calculateProfit();
+		const savedPerWeek = document.getElementById('savedPerWeek');
+	  const days  = document.getElementById('daysInput');
+	  days.value = '';
+	  savedPerWeek.textContent='Saved Per week: $0';
+	  
+		
 	}
 	
 	function limitDigits(event) 
@@ -228,6 +354,41 @@
 		input.value = input.value.slice(0, 7);
 	  }
 	}
+	
+	function toggleExpand() 
+	{
+	  const div = document.getElementById('expandable');
+	  div.classList.toggle('expanded');
+	}
+	
+	function limitToTwoDigits(input) 
+	{
+	  if (input.value.length > 2) 
+	  {
+		input.value = input.value.slice(0, 2);
+	  }
+	}
+	
+	function savedPerWeek() 
+	{
+	  const daysSelect = document.getElementById('daysInput');
+	  const days = parseInt(daysSelect.value);
+	  const profitValue = parseFloat(document.getElementById('profitAmount').textContent);
+
+	  if (!isNaN(days) && days > 0 && !isNaN(profitValue)) 
+	  {
+		const perWeek = (profitValue / (days / 7)).toFixed(2);
+		document.getElementById('savedPerWeek').textContent = `Saved per week: $${perWeek}`;
+	  } 
+	  else 
+	  {
+		document.getElementById('savedPerWeek').textContent = `Saved per week: $0.00`;
+	  }
+	}
+
+
+
+
 	
 	function checkMobile() 
 	{
@@ -250,9 +411,12 @@
 // Run on page load
 const screenInfo = checkMobile();
 
-
+// Listeners
 document.getElementById('startBalance').addEventListener('input', limitDigits);
 document.getElementById('endBalance').addEventListener('input', limitDigits);
+document.getElementById('startBalance').addEventListener('input', calculateProfit);
+document.getElementById('endBalance').addEventListener('input', calculateProfit);
+
 
   </script>
 
